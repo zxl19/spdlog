@@ -34,6 +34,7 @@ elseif(NOT CMAKE_CXX_STANDARD)
 endif()
 
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(CMAKE_SYSTEM_NAME MATCHES "CYGWIN" OR CMAKE_SYSTEM_NAME MATCHES "MSYS" OR CMAKE_SYSTEM_NAME MATCHES "MINGW")
     set(CMAKE_CXX_EXTENSIONS ON)
@@ -74,7 +75,7 @@ option(SPDLOG_BUILD_TESTS "Build tests" OFF)
 option(SPDLOG_BUILD_TESTS_HO "Build tests using the header only version" OFF)
 
 # bench options
-option(SPDLOG_BUILD_BENCH "Build benchmarks (Requires https://github.com/google/benchmark.git to be installed)" OFF)
+option(SPDLOG_BUILD_BENCH "Build benchmarks (Requires https://github.com/google/benchmark.git to be installed)" ON)
 
 # sanitizer options
 option(SPDLOG_SANITIZE_ADDRESS "Enable address sanitizer in tests" OFF)

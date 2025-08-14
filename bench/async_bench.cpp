@@ -72,7 +72,9 @@ int main(int argc, char *argv[]) {
     int iters = 3;
 
     try {
-        spdlog::set_pattern("[%^%l%$] %v");
+        // spdlog::set_pattern("[%^%l%$] %v");
+        // log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+        spdlog::set_pattern("%^[%L%m%d %T.%f %t %s:%#] %v%$");
         if (argc == 1) {
             spdlog::info("Usage: {} <message_count> <threads> <q_size> <iterations>", argv[0]);
             return 0;
@@ -87,6 +89,13 @@ int main(int argc, char *argv[]) {
                 exit(1);
             }
         }
+
+        SPDLOG_TRACE("This is a SPDLOG_TRACE message.");
+        SPDLOG_DEBUG("This is a SPDLOG_DEBUG message.");
+        SPDLOG_INFO("This is a SPDLOG_INFO message.");
+        SPDLOG_WARN("This is a SPDLOG_WARN message.");
+        SPDLOG_ERROR("This is a SPDLOG_ERROR message.");
+        SPDLOG_CRITICAL("This is a SPDLOG_CRITICAL message.");
 
         if (argc > 4) iters = atoi(argv[4]);
 
