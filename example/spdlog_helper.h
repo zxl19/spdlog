@@ -33,13 +33,11 @@ inline void init_spdlog_async(const std::string& log_file = "logs/app.log",
     // 根据参数决定是否添加控制台输出
     if (console_output) {
         auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-        console_sink->set_level(spdlog::level::debug);
         sinks.emplace_back(console_sink);
     }
 
     // 添加文件输出
     auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(log_file, true);
-    file_sink->set_level(spdlog::level::trace);
     sinks.emplace_back(file_sink);
 
     // 创建多目标日志器
@@ -47,17 +45,19 @@ inline void init_spdlog_async(const std::string& log_file = "logs/app.log",
                                                          spdlog::thread_pool(),
                                                          spdlog::async_overflow_policy::block);
 
-    // 设置日志级别和格式
-    logger->set_level(spdlog::level::debug);
-    logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] [thread %t] %v");
-    // log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
-    // logger->set_pattern("%^[%L%m%d %T.%f %t %s:%#] %v%$");
-
-    // 注册为默认日志器
+    // *全局设置
+    // 注册日志器
+    spdlog::register_logger(logger);
+    // 设置默认日志器
     spdlog::set_default_logger(logger);
-
-    // 每隔3秒刷新一次日志
-    spdlog::flush_every(std::chrono::seconds(3));
+    // 设置info级别及以上日志输出
+    spdlog::set_level(spdlog::level::info);
+    // 设置日志输出样式：[[IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+    spdlog::set_pattern("%^[%L%m%d %T.%f %t %s:%#]%$ %v");
+    // 设置err级别及以上日志强制刷新缓冲区
+    spdlog::flush_on(spdlog::level::err);
+    // 设置每30秒强制刷新缓冲区
+    spdlog::flush_every(std::chrono::seconds(30));
 }
 
 // 定义日志级别枚举
